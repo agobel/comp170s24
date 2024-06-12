@@ -7,6 +7,11 @@
  */
 public class Decompose {
     public static void main(String[] args) {
+        Recipe.BananaBread();
+    }
+}
+class Recipe {
+    public static void BananaBread() {
         System.out.println("3 ripe bananas");
         System.out.println("cream butter with sugar");
         System.out.println("grease baking pan");
