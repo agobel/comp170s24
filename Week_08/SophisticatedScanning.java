@@ -104,7 +104,8 @@ public class SophisticatedScanning {
                 // Split the current line from the file into words (tokens separated by spaces
                 // and place them in a String array)
                 String[] wordsFromCurrentLine = sc.nextLine().split(" ");
-                // The number of elements in that string array is the number of words in the current line
+                // The number of elements in that string array is the number of words in the
+                // current line
                 countWords = countWords + wordsFromCurrentLine.length;
                 // traverse word array to count characters
                 for (int i = 0; i < wordsFromCurrentLine.length; i++) {
@@ -120,52 +121,89 @@ public class SophisticatedScanning {
         return description;
     } // method countElementsPaleolithic
 
-
     /**
-     * Demonstration of a less-prehistoric way of bundling three values into a single
+     * Demonstration of a less-prehistoric way of bundling three values into a
+     * single
      * return variable. The method counts the lines, words, and characters in a
      * file, and returns all three values packaged as an array. Users of this method
-     * must be be aware of the positional convention for the return array. The 
+     * must be be aware of the positional convention for the return array. The
      * positional notation is incorporated in the method, with constants LINES,
-     * WORDS, CHARACTERS referencing the elements of the return array with the 
+     * WORDS, CHARACTERS referencing the elements of the return array with the
      * corresponding values.
      * 
      * @param filename String with filepath to analyze
-     * @return int[] where [LINES] is the count of lines in the file, [WORDS] is the count
-     *         of words, and [CHARACTERS] is the count of characters. If the file is not
+     * @return int[] where [LINES] is the count of lines in the file, [WORDS] is the
+     *         count
+     *         of words, and [CHARACTERS] is the count of characters. If the file is
+     *         not
      *         accessible, the method will return the array [-1, -1, -1]
      */
-    public static int[] countElementsNeolithic(String filename) {
+    public static double[] countElementsNeolithic(String filename) {
         // Array to return; assume the worst
-        int[] description = { -1, -1, -1 };
+        double[] counter = { -1.0, -1.0, -1.0, -1.0, -1.0 };
         // Positional references for the return array
         final int LINES = 0, WORDS = 1, CHARACTERS = 2;
+        final int WORDS_PER_LINE = 3, CHAR_PER_LINE = 4;
         Scanner sc = connectToFile(filename);
         if (sc != null) {
             // Connection to the file was successful; initiate line, word, and character
             // counters.
-            description[LINES] = 0;
-            description[WORDS] = 0;
-            description[CHARACTERS] = 0;
+            counter[LINES] = 0;
+            counter[WORDS] = 0;
+            counter[CHARACTERS] = 0;
             while (sc.hasNextLine()) {
-                description[LINES]++;
+                counter[LINES]++;
                 // Split the current line from the file into words (tokens separated by spaces
                 // and place them in a String array)
                 String[] wordsFromCurrentLine = sc.nextLine().split(" ");
-                // The number of elements in that string array is the number of words in the current line
-                description[WORDS] += wordsFromCurrentLine.length;
+                // The number of elements in that string array is the number of words in the
+                // current line
+                counter[WORDS] += wordsFromCurrentLine.length;
                 // traverse word array to count characters
-                for (String word: wordsFromCurrentLine) {
-                    description[CHARACTERS] += word.length();
+                for (String word : wordsFromCurrentLine) {
+                    counter[CHARACTERS] += word.length();
                 }
             }
-            // done scanning the file
+            // done scanning the file ... computer averages
+            counter[WORDS_PER_LINE] = counter[WORDS] / (1+counter[LINES]);
+            counter[CHAR_PER_LINE] = counter[CHARACTERS] / (1+counter[LINES]);
             sc.close(); // be nice
         }
-        return description;
+        return counter;
     } // method countElementsNeolithic
 
-    
+    public static FileDescription countElementsModern(String filename) {
+        FileDescription fd = new FileDescription();
+        Scanner sc = connectToFile(filename);
+        if (sc != null) {
+            int longestStringLength = 0;
+            String longestString = "";
+            fd.reset(); // set all fd variables to 0
+            while (sc.hasNextLine()) {
+                fd.linesCount++;
+                String currentLine = sc.nextLine();
+                // Break current line into array of words
+                String[] words = currentLine.split(" ");
+                // Add number of words to corresponding count
+                fd.wordsCount = fd.wordsCount + words.length;
+                // count the characters in each word and update the corresponding count
+                for (String word : words) { // for every string inside the array words
+                    if (word.length() > longestStringLength) {
+                        longestStringLength = word.length();
+                        longestString = word;
+                    }
+                    fd.charactersCount = fd.charactersCount + word.length();
+                }
+            }
+            // update averages
+            fd.wordsPerLine = fd.wordsCount / (1+fd.linesCount);
+            fd.charsPerLine = fd.charactersCount / (1+fd.linesCount);
+            // update the longest string
+            fd.longestWordFound = longestString;
+        }
+        return fd;
+    }
+
     /**
      * Displays information about a file, specifically the number of lines in it.
      * 
@@ -193,6 +231,10 @@ public class SophisticatedScanning {
 
         System.out.println("\nDemo countElements:\n");
         System.out.println(Arrays.toString(countElementsNeolithic(rightFilename)));
+
+        System.out.println("\nHow about using our own object?");
+        FileDescription fd = countElementsModern(rightFilename);
+        System.out.println(fd);
     } // method main
 
 } // class SophisticatedScanning
