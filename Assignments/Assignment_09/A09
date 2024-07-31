@@ -1,0 +1,137 @@
+import java.util.Objects;
+
+/**
+ * Describes a river with various attributes of name, length, and width.
+ * Implements compareTo(River other) for rivers to be compared by their length.
+ */
+public class River implements compareTo(River other) {
+
+    // Private fields (attributes)
+    private String name;
+    private double length;
+    private double width;
+
+    // Default constant values
+    private static final String DEFAULT_NAME = "Unknown";
+    private static final double DEFAULT_LENGTH = 0.0;
+    private static final double DEFAULT_WIDTH = 0.0;
+
+    /**
+     * Default constructor initializing attributes with default values.
+     */
+    public River() {
+        this.name = DEFAULT_NAME;
+        this.length = DEFAULT_LENGTH;
+        this.width = DEFAULT_WIDTH;
+    }
+
+    /**
+     * Constructor initializing attributes with given values.
+     *
+     * The attributes are set as follows:
+     *  - The name of the river is set to the provided value
+     *  - The length of the river is set to the provided value
+     *  - The width of the river is set to the provided value
+     */
+    public River(String name, double length, double width) {
+        this.name = name;
+        this.length = length;
+        this.width = width;
+    }
+
+    /**
+     * Gets the name of the river.
+     *
+     * @return the name of the river
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets the length of the river.
+     *
+     * @return the length of the river
+     */
+    public double getLength() {
+        return length;
+    }
+
+    /**
+     * Gets the width of the river.
+     *
+     * @return the width of the river
+     */
+    public double getWidth() {
+        return width;
+    }
+
+    /**
+     * Returns a string representation of the river.
+     *
+     * @return a string representation of the river in the format "River{name='name', length=length, width=width}"
+     */
+    @Override
+    public String toString() {
+        return "River{name='" + name + "', length=" + length + ", width=" + width + '}';
+    }
+    
+        /**
+     * Compares this river with another river based on their length.
+     * 
+     * The comparison is based on the length of the rivers.
+     * 
+     * @return a negative integer, zero, or a positive integer as this river's length
+     *         is less than, equal to, or greater than the other river's length
+     */
+    @Override
+    public int compareTo(River other) {
+        return Double.compare(this.length, other.length);
+    }
+
+    /**
+     * Checks if this river is equal to another river based on their attributes.
+     * Rivers are considered equal if they have the same name, length, and width.
+     *
+     * @return true if both rivers have the same name, length, and width; false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        River other = (River) obj;
+        return Double.compare(other.length, length) == 0 &&
+               Double.compare(other.width, width) == 0 &&
+               name.equals(other.name);
+    }
+
+    /**
+     * Returns a hash code value for the river.
+     *
+     * @return a hash code value for the river, computed using its attributes
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, length, width);
+    }
+
+     /**
+     * Main method to demonstrate the functionality of the River class.
+     */
+    public static void main(String[] args) {
+        River river1 = new River("Amazon", 6400, 1.5);
+        River river2 = new River("Nile", 6650, 2.0);
+        River river3 = new River("Amazon", 6400, 1.5);
+
+        // Display rivers
+        System.out.println(river1);
+        System.out.println(river2);
+
+        // Compare rivers
+        System.out.println("Comparing river1 and river2: " + river1.compareTo(river2));
+
+        // Check equality
+        System.out.println("river1 equals river2: " + river1.equals(river2));
+        System.out.println("river1 equals river3: " + river1.equals(river3));
+    }
+}
